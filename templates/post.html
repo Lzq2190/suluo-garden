@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|${post.spec.title} - ${site.title}|">文章标题</title>
+    <meta name="description" th:if="${post.status.excerpt != null}" th:content="${post.status.excerpt}">
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <article class="article">
+    <header class="article-header">
+      <p class="article-eyebrow"><span aria-hidden="true"></span>园中随笔 · 花事一卷</p>
+      <h1 class="article-title" th:text="${post.spec.title}">文章标题</h1>
+      <span class="article-brush" aria-hidden="true"></span>
+      <div class="post-meta">
+        <span class="post-meta-item" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2026-11-06</span>
+        <span class="post-meta-item" th:if="${post.owner}" th:text="${post.owner?.displayName}">作者</span>
+        <span class="post-meta-item" th:text="${post.stats?.visit ?: 0} + ' 阅读'">0 阅读</span>
+        <span class="post-meta-item" th:text="${post.stats?.comment ?: 0} + ' 评论'">0 评论</span>
+      </div>
+      <div class="article-taxonomy" th:if="${not #lists.isEmpty(post.categories) or not #lists.isEmpty(post.tags)}">
+        <a class="article-cat" th:each="cat : ${post.categories}" th:href="@{${cat.status.permalink}}" th:text="${cat.spec.displayName}">分类</a>
+        <a class="article-tag" th:each="tag : ${post.tags}" th:href="@{${tag.status.permalink}}" th:text="'# ' + ${tag.spec.displayName}">标签</a>
+      </div>
+      <svg class="article-flower" viewBox="0 0 120 100" aria-hidden="true"><use href="#m-plant" x="0" y="-22" width="120" height="170"/></svg>
+    </header>
+
+    <div class="article-body" th:utext="${post.content.content}"></div>
+
+    <p class="article-end" aria-hidden="true">
+      <span></span>
+      <svg viewBox="0 0 120 100"><use href="#m-plant" x="0" y="-22" width="120" height="170"/></svg>
+      <span></span>
+    </p>
+
+    <nav class="article-nav" th:with="cursor = ${postFinder.cursor(post.metadata.name)}">
+      <a class="article-nav-prev" th:if="${cursor.hasPrevious()}" th:href="@{${cursor.previous.status.permalink}}" th:text="'← ' + ${cursor.previous.spec.title}">上一篇</a>
+      <a class="article-nav-next" th:if="${cursor.hasNext()}" th:href="@{${cursor.next.status.permalink}}" th:text="${cursor.next.spec.title} + ' →'">下一篇</a>
+    </nav>
+
+    <section class="article-comment" th:if="${haloCommentEnabled}">
+      <halo:comment group="content.halo.run" kind="Post" th:attr="name=${post.metadata.name}" colorScheme="light" />
+    </section>
+  </article>
+</th:block>
+</body>
+</html>

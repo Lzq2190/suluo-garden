@@ -1,0 +1,92 @@
+apiVersion: v1alpha1
+kind: Setting
+metadata:
+  name: suluo-garden-setting
+spec:
+  forms:
+    - group: basic
+      label: 题字
+      formSchema:
+        - $formkit: text
+          name: hero_title
+          label: 首屏大标题
+          value: 一窗烟雨
+          help: 留空则使用站点标题
+        - $formkit: text
+          name: hero_subtitle
+          label: 首屏副标题
+          value: 花开彼岸，雨落江南
+          help: 展现在大标题下方
+        - $formkit: text
+          name: hero_inscription
+          label: 题跋小字
+          value: 花叶不相见，一秋一忘川
+          help: 首屏题字旁的竖排小字
+        - $formkit: text
+          name: footer_poetry
+          label: 页脚诗句
+          value: 彼岸花开，此岸人独立
+          help: 显示在页脚花田上方
+        - $formkit: color
+          name: accent_color
+          label: 彼岸朱
+          value: "#B3322B"
+          help: 花瓣、印章与强调色；深色模式会自动提亮
+    - group: bloom
+      label: 花事
+      formSchema:
+        - $formkit: select
+          name: default_scene
+          label: 默认花事
+          value: spider
+          help: 访客首次进入时的飘落效果；右上角可自行切换
+          options:
+            - label: 彼岸（落花 + 萤火）
+              value: spider
+            - label: 细雨
+              value: rain
+            - label: 桂雨
+              value: osmanthus
+            - label: 静（无粒子）
+              value: still
+        - $formkit: number
+          name: particle_count
+          label: 落花数量
+          value: 72
+          min: 0
+          max: 180
+          step: 2
+          help: 桌面端数量，移动端自动减半；设为 0 可完全关闭
+        - $formkit: checkbox
+          name: allow_switch
+          label: 显示花事切换按钮
+          value: true
+          help: 关闭后访客不能切换
+    - group: effect
+      label: 园景
+      formSchema:
+        - $formkit: checkbox
+          name: show_moon
+          label: 显示月轮
+          value: true
+          help: 首屏右上方的月与光晕
+        - $formkit: checkbox
+          name: show_eaves
+          label: 显示飞檐
+          value: true
+          help: 导航上方的薄檐剪影
+        - $formkit: checkbox
+          name: show_hills
+          label: 显示远山花田
+          value: true
+          help: 首屏与页脚的远山、花田剪影
+        - $formkit: checkbox
+          name: show_parallax
+          label: 花田随鼠标轻摆
+          value: true
+          help: 关闭可减少动画
+        - $formkit: checkbox
+          name: show_ripple
+          label: 点击朱晕
+          value: true
+          help: 点击空白处泛起朱色水纹

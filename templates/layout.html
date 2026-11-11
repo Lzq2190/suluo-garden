@@ -1,0 +1,320 @@
+<!DOCTYPE html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org" th:fragment="html (head, content)">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+
+  <title th:if="${head == null}" th:text="${site.title}">一窗烟雨</title>
+  <th:block th:if="${head != null}"><th:block th:replace="${head}" /></th:block>
+  <meta name="description" th:content="${site.subtitle}">
+  <link rel="icon" th:if="${site.favicon != null and !#strings.isEmpty(site.favicon)}" th:href="${site.favicon}">
+
+  <!-- 先定明暗，避免首屏闪烁 -->
+  <script>
+    (function () {
+      var saved = null;
+      try { saved = localStorage.getItem('jn-theme'); } catch (e) {}
+      var dark = saved ? saved === 'dark'
+        : (window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches);
+      document.documentElement.setAttribute('data-theme', dark ? 'dark' : 'light');
+    })();
+  </script>
+
+  <link rel="preconnect" href="https://gcore.jsdelivr.net" crossorigin>
+  <link rel="stylesheet" href="https://gcore.jsdelivr.net/npm/lxgw-wenkai-webfont@1.1.0/style.css" media="print" onload="this.media='all'">
+
+  <link rel="stylesheet" th:href="@{/themes/suluo-garden/assets/css/main.css?v={version}(version=${theme.spec.version})}">
+</head>
+<body th:style="'--accent:' + ${theme.config?.basic?.accent_color ?: '#B3322B'} + ';'">
+
+  <!-- ===== 彼岸花图形定义：全站共用，页面里用 <use href="#m-plant"/> 引用 ===== -->
+  <svg class="svg-defs" xmlns="http://www.w3.org/2000/svg" aria-hidden="true" focusable="false">
+    <defs>
+      <g id="m-petal">
+        <path class="m-petal-shape" d="M60 66 C46 54 34 34 40 19 C43 12 52 11 55 17 C58 23 54 29 50 31 C47 35 50 45 56 53 C58 58 60 62 60 66 Z"/>
+        <path class="m-petal-vein" d="M60 66 C49 51 42 33 44 21"/>
+      </g>
+      <g id="m-filament">
+        <path class="m-fil-line" d="M60 66 C53 40 44 18 36 4"/>
+        <circle class="m-fil-dot" cx="36" cy="4" r="2.2"/>
+      </g>
+      <symbol id="m-plant" viewBox="0 0 120 170">
+        <path class="m-stem" d="M60 170 C56 132 64 100 60 66"/>
+        <g class="m-bloom">
+          <g class="m-petal-group m-petal-back">
+            <use href="#m-petal" transform="rotate(30 60 66)"/><use href="#m-petal" transform="rotate(90 60 66)"/>
+            <use href="#m-petal" transform="rotate(150 60 66)"/><use href="#m-petal" transform="rotate(210 60 66)"/>
+            <use href="#m-petal" transform="rotate(270 60 66)"/><use href="#m-petal" transform="rotate(330 60 66)"/>
+          </g>
+          <g class="m-petal-group">
+            <use href="#m-petal" transform="rotate(0 60 66)"/><use href="#m-petal" transform="rotate(60 60 66)"/>
+            <use href="#m-petal" transform="rotate(120 60 66)"/><use href="#m-petal" transform="rotate(180 60 66)"/>
+            <use href="#m-petal" transform="rotate(240 60 66)"/><use href="#m-petal" transform="rotate(300 60 66)"/>
+          </g>
+          <g class="m-fil-group">
+            <use href="#m-filament" transform="rotate(0 60 66)"/><use href="#m-filament" transform="rotate(45 60 66)"/>
+            <use href="#m-filament" transform="rotate(90 60 66)"/><use href="#m-filament" transform="rotate(135 60 66)"/>
+            <use href="#m-filament" transform="rotate(180 60 66)"/><use href="#m-filament" transform="rotate(225 60 66)"/>
+            <use href="#m-filament" transform="rotate(270 60 66)"/><use href="#m-filament" transform="rotate(315 60 66)"/>
+          </g>
+          <circle class="m-core" cx="60" cy="66" r="3.2"/>
+        </g>
+      </symbol>
+    </defs>
+  </svg>
+
+  <!-- 顶部薄檐：只留一痕，不再抢画面 -->
+  <div class="eaves" th:if="${theme.config?.effect?.show_eaves != false}" aria-hidden="true">
+    <svg viewBox="0 0 1200 40" preserveAspectRatio="none">
+      <path class="eave-fill" d="M0 2 C28 16 58 24 104 25 L1096 25 C1142 24 1172 16 1200 2 L1200 0 L0 0 Z"/>
+      <path class="eave-edge" d="M0 2 C28 16 58 24 104 25 L1096 25 C1142 24 1172 16 1200 2" fill="none"/>
+    </svg>
+  </div>
+
+  <!-- 花事粒子层：落花 / 萤火 / 细雨 / 桂雨 -->
+  <div class="sky-weather" id="weather" aria-hidden="true"></div>
+
+  <div class="site-wrapper">
+    <header class="site-header">
+      <div class="site-container">
+        <nav class="site-nav">
+          <a class="site-title" th:href="@{/}">
+            <span class="title-seal" aria-hidden="true">彼岸</span>
+            <span th:text="${site.title}">一窗烟雨</span>
+          </a>
+          <ul class="nav-menu">
+            <li><a class="nav-link" data-nav="home" th:href="@{/}">首页</a></li>
+            <li><a class="nav-link" data-nav="archives" th:href="@{/archives}">归档</a></li>
+            <li><a class="nav-link" data-nav="categories" th:href="@{/categories}">分类</a></li>
+            <li><a class="nav-link" data-nav="tags" th:href="@{/tags}">标签</a></li>
+            <li><a class="nav-link" data-nav="links" th:href="@{/links}">友链</a></li>
+          </ul>
+          <div class="nav-tools">
+            <button class="weather-toggle" id="weatherToggle" type="button" th:if="${theme.config?.bloom?.allow_switch != false}"
+                    aria-label="切换花事" title="切换花事：彼岸 / 细雨 / 桂雨 / 静">
+              <span class="weather-glyph" id="weatherGlyph">彼</span>
+            </button>
+            <button class="theme-toggle" id="themeToggle" type="button" aria-label="切换明暗模式" title="切换明暗模式">
+              <svg class="icon-moon" viewBox="0 0 24 24" aria-hidden="true"><path d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8z"/></svg>
+              <svg class="icon-sun" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="4.2"/><path d="M12 2v2.2M12 19.8V22M2 12h2.2M19.8 12H22M4.9 4.9l1.6 1.6M17.5 17.5l1.6 1.6M19.1 4.9l-1.6 1.6M6.5 17.5l-1.6 1.6"/></svg>
+            </button>
+          </div>
+        </nav>
+      </div>
+    </header>
+
+    <main class="site-main">
+      <div class="site-container">
+        <th:block th:replace="${content}" />
+      </div>
+    </main>
+
+    <footer class="site-footer">
+      <!-- 页脚：远山一痕 + 一整片花田剪影 -->
+      <div class="footer-scene" th:if="${theme.config?.effect?.show_hills != false}" aria-hidden="true">
+        <svg viewBox="0 0 1440 260" preserveAspectRatio="xMidYMax slice">
+          <path class="hill-far" d="M0 132 Q120 86 244 124 T488 116 Q610 76 736 120 T980 110 Q1108 78 1236 120 T1440 112 L1440 260 L0 260 Z"/>
+          <path class="hill-near" d="M0 168 Q160 138 306 162 T612 158 Q756 128 900 164 T1204 154 Q1330 138 1440 160 L1440 260 L0 260 Z"/>
+          <g class="footer-field">
+            <use class="plant layer-far" href="#m-plant" x="40" y="150" width="76" height="108" style="--d:-1.2s"/>
+            <use class="plant layer-far" href="#m-plant" x="180" y="166" width="68" height="96" style="--d:-3.1s"/>
+            <use class="plant layer-mid" href="#m-plant" x="330" y="176" width="96" height="136" style="--d:-.6s"/>
+            <use class="plant layer-mid" href="#m-plant" x="470" y="192" width="88" height="125" style="--d:-2.4s"/>
+            <use class="plant layer-near" href="#m-plant" x="620" y="178" width="112" height="159" style="--d:-1.8s"/>
+            <use class="plant layer-mid" href="#m-plant" x="760" y="190" width="94" height="133" style="--d:-3.6s"/>
+            <use class="plant layer-near" href="#m-plant" x="900" y="172" width="118" height="167" style="--d:-.3s"/>
+            <use class="plant layer-mid" href="#m-plant" x="1060" y="188" width="90" height="128" style="--d:-2.9s"/>
+            <use class="plant layer-far" href="#m-plant" x="1210" y="160" width="74" height="105" style="--d:-1.5s"/>
+            <use class="plant layer-near" href="#m-plant" x="1330" y="174" width="112" height="159" style="--d:-2.1s"/>
+          </g>
+        </svg>
+      </div>
+      <div class="site-container">
+        <div class="footer-content">
+          <svg class="footer-flower" viewBox="0 0 120 120" aria-hidden="true"><use href="#m-plant" x="0" y="-22" width="120" height="170"/></svg>
+          <p class="footer-poetry" th:text="${theme.config?.basic?.footer_poetry ?: '彼岸花开，此岸人独立'}">彼岸花开，此岸人独立</p>
+          <p class="footer-info">
+            &copy; <span th:text="${#dates.year(#dates.createNow())}">2026</span>
+            <a th:href="@{/}" th:text="${site.title}">一窗烟雨</a>
+            <span class="footer-divider">·</span>
+            Powered by <a href="https://www.halo.run" target="_blank" rel="noopener">Halo</a>
+            <span class="footer-divider">·</span>
+            Theme <a href="https://www.jfsv.cn" target="_blank" rel="noopener">彼岸花事</a>
+          </p>
+          <!-- 代码注入区：备案号、公安备案及插件页脚脚本，勿删 -->
+          <div class="footer-beian"><halo:footer /></div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <!-- 点击朱晕 -->
+  <div class="ripple-layer" id="rippleLayer" aria-hidden="true"></div>
+
+  <script>
+    (function () {
+      var root = document.documentElement;
+      var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+      var defaultScene = /*[[${theme.config?.bloom?.default_scene ?: 'spider'}]]*/ 'spider';
+      var configured   = /*[[${theme.config?.bloom?.particle_count ?: 72}]]*/ 72;
+      var canSwitch    = /*[[${theme.config?.bloom?.allow_switch != false}]]*/ true;
+      var rippleOn     = /*[[${theme.config?.effect?.show_ripple != false}]]*/ true;
+      var parallaxOn   = /*[[${theme.config?.effect?.show_parallax != false}]]*/ true;
+
+      var order = ['spider', 'rain', 'osmanthus', 'still'];
+      var label = { spider: '彼', rain: '雨', osmanthus: '桂', still: '静' };
+      var box = document.getElementById('weather');
+      var fireHost = document.getElementById('heroFireflies') || box;
+      var glyph = document.getElementById('weatherGlyph');
+      var btn = document.getElementById('weatherToggle');
+
+      function currentScene() {
+        var v = null;
+        try { v = localStorage.getItem('jn-weather'); } catch (e) {}
+        return order.indexOf(v) >= 0 ? v : defaultScene;
+      }
+
+      function rnd(a, b) { return (a + Math.random() * (b - a)).toFixed(2); }
+
+      function paintScene(mode) {
+        if (!box) return;
+        box.setAttribute('data-mode', mode);
+        box.innerHTML = '';
+        if (fireHost !== box) fireHost.innerHTML = '';
+        if (glyph) glyph.textContent = label[mode];
+        if (btn) btn.setAttribute('data-mode', mode);
+        if (mode === 'still' || reduced || configured <= 0) return;
+
+        var mobile = window.innerWidth < 768;
+        var base = Math.round(mobile ? configured * 0.5 : configured);
+        var frag = document.createDocumentFragment();
+        var i, p;
+
+        if (mode === 'spider') {
+          var petals = Math.round(base * 0.8);
+          for (i = 0; i < petals; i++) {
+            p = document.createElement('i');
+            p.className = 'petal-fall';
+            p.style.left = rnd(-4, 100) + '%';
+            p.style.setProperty('--sz', rnd(11, 21) + 'px');
+            p.style.setProperty('--hue', rnd(-18, 18) + 'deg');
+            p.style.animationDelay = (-Math.random() * 16).toFixed(2) + 's';
+            p.style.animationDuration = rnd(9, 17) + 's';
+            p.style.opacity = rnd(0.45, 0.95);
+            frag.appendChild(p);
+          }
+          var flies = Math.round(base * 0.3);
+          for (i = 0; i < flies; i++) {
+            p = document.createElement('i');
+            p.className = 'firefly';
+            p.style.left = rnd(0, 100) + '%';
+            p.style.animationDelay = (-Math.random() * 12).toFixed(2) + 's';
+            p.style.animationDuration = rnd(7, 14) + 's';
+            p.style.setProperty('--fs', rnd(2, 4.5) + 'px');
+            fireHost.appendChild(p);
+          }
+        } else {
+          var count = Math.round(base * (mode === 'osmanthus' ? 0.7 : 1));
+          for (i = 0; i < count; i++) {
+            p = document.createElement('i');
+            p.className = mode === 'rain' ? 'drop-rain' : 'drop-osmanthus';
+            p.style.left = rnd(0, 100) + '%';
+            if (mode === 'rain') {
+              p.style.animationDelay = (-Math.random() * 2.4).toFixed(2) + 's';
+              p.style.animationDuration = rnd(0.9, 1.8) + 's';
+              p.style.opacity = rnd(0.18, 0.6);
+              p.style.height = rnd(14, 40) + 'px';
+            } else {
+              p.style.animationDelay = (-Math.random() * 11).toFixed(2) + 's';
+              p.style.animationDuration = rnd(6, 12) + 's';
+              p.style.opacity = rnd(0.35, 0.85);
+              p.style.fontSize = rnd(3, 6) + 'px';
+            }
+            frag.appendChild(p);
+          }
+        }
+        box.appendChild(frag);
+      }
+
+      paintScene(currentScene());
+      if (btn && canSwitch) {
+        btn.addEventListener('click', function () {
+          var next = order[(order.indexOf(currentScene()) + 1) % order.length];
+          try { localStorage.setItem('jn-weather', next); } catch (e) {}
+          paintScene(next);
+        });
+      }
+
+      /* 明暗切换 */
+      var toggle = document.getElementById('themeToggle');
+      if (toggle) {
+        toggle.addEventListener('click', function () {
+          var next = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+          root.classList.add('theme-anim');
+          root.setAttribute('data-theme', next);
+          try { localStorage.setItem('jn-theme', next); } catch (e) {}
+          window.setTimeout(function () { root.classList.remove('theme-anim'); }, 460);
+        });
+      }
+
+      /* 当前导航高亮 */
+      var path = location.pathname.replace(/\/+$/, '') || '/';
+      var key = 'home';
+      if (path.indexOf('/archives') === 0) key = 'archives';
+      else if (path.indexOf('/categories') === 0) key = 'categories';
+      else if (path.indexOf('/tags') === 0) key = 'tags';
+      else if (path.indexOf('/links') === 0) key = 'links';
+      document.querySelectorAll('.nav-link').forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('data-nav') === key);
+      });
+
+      /* 朱晕入场 */
+      if (!reduced && 'IntersectionObserver' in window) {
+        var targets = document.querySelectorAll('.post-card, .term-card, .link-card, .archive-year, .section-head');
+        targets.forEach(function (el) { el.classList.add('reveal'); });
+        var io = new IntersectionObserver(function (entries) {
+          entries.forEach(function (en) {
+            if (en.isIntersecting) { en.target.classList.add('revealed'); io.unobserve(en.target); }
+          });
+        }, { rootMargin: '0px 0px -8% 0px', threshold: 0.06 });
+        targets.forEach(function (el) { io.observe(el); });
+      }
+
+      /* 花田随鼠标轻摆 */
+      if (parallaxOn && !reduced && window.matchMedia('(pointer: fine)').matches) {
+        var hero = document.getElementById('hero');
+        var field = document.getElementById('heroField');
+        if (hero && field) {
+          hero.addEventListener('mousemove', function (e) {
+            var r = hero.getBoundingClientRect();
+            field.style.setProperty('--px', ((e.clientX - r.left) / r.width - 0.5) * 22 + 'px');
+            field.style.setProperty('--py', ((e.clientY - r.top) / r.height - 0.5) * 10 + 'px');
+          });
+          hero.addEventListener('mouseleave', function () {
+            field.style.setProperty('--px', '0px');
+            field.style.setProperty('--py', '0px');
+          });
+        }
+      }
+
+      /* 点击朱晕 */
+      if (rippleOn && !reduced) {
+        var layer = document.getElementById('rippleLayer');
+        document.addEventListener('click', function (e) {
+          if (e.target.closest('a, button, input, textarea, select, .post-card')) return;
+          if (!layer) return;
+          var r = document.createElement('span');
+          r.className = 'ripple';
+          r.style.left = e.clientX + 'px';
+          r.style.top = e.clientY + 'px';
+          layer.appendChild(r);
+          window.setTimeout(function () { r.remove(); }, 1100);
+        });
+      }
+    })();
+  </script>
+
+</body>
+</html>

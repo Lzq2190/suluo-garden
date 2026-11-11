@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|分类 - ${site.title}|">分类</title>
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <section class="page-head">
+    <h1 class="page-title">分类</h1>
+    <p class="page-desc">文章分类总览</p>
+  </section>
+
+  <ul class="term-list">
+    <li class="term-card" th:each="cat : ${categories}">
+      <a th:href="@{${cat.status.permalink}}">
+        <span class="term-name" th:text="${cat.spec.displayName}">分类名</span>
+        <span class="term-count" th:text="${cat.postCount + ' 篇文章'}">0 篇文章</span>
+        <span class="term-desc" th:if="${cat.spec.description != null and !#strings.isEmpty(cat.spec.description)}" th:text="${cat.spec.description}">描述</span>
+      </a>
+    </li>
+  </ul>
+
+  <p class="empty-tip" th:if="${#lists.isEmpty(categories)}">暂无分类。</p>
+</th:block>
+</body>
+</html>

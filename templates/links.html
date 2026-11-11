@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|友链 - ${site.title}|">友链</title>
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <section class="page-head">
+    <h1 class="page-title">友链</h1>
+    <p class="page-desc">往来皆是知己</p>
+  </section>
+
+  <th:block th:if="${linkFinder != null}">
+    <div class="link-group" th:each="group : ${linkFinder.groupBy()}">
+      <h2 class="link-group-title" th:text="${group.spec.displayName != null and !#strings.isEmpty(group.spec.displayName) ? group.spec.displayName : '未分组'}">未分组</h2>
+      <ul class="link-list">
+        <li class="link-card" th:each="link : ${group.links}">
+          <a th:href="${link.spec.url}" target="_blank" rel="noopener noreferrer">
+            <img class="link-logo"
+                 th:if="${link.spec.logo != null and !#strings.isEmpty(link.spec.logo)}"
+                 th:src="${link.spec.logo}" th:alt="${link.spec.displayName}" loading="lazy" />
+            <span class="link-name" th:text="${link.spec.displayName}">站点名称</span>
+            <span class="link-desc" th:if="${link.spec.description != null and !#strings.isEmpty(link.spec.description)}" th:text="${link.spec.description}">站点描述</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </th:block>
+
+  <p class="empty-tip" th:if="${linkFinder == null}">友链插件尚未启用。</p>
+  <p class="empty-tip" th:if="${linkFinder != null and #lists.isEmpty(linkFinder.groupBy())}">暂无友链。</p>
+</th:block>
+</body>
+</html>

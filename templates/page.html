@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|${singlePage.spec.title} - ${site.title}|">页面</title>
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <article class="article">
+    <header class="article-header">
+      <h1 class="article-title" th:text="${singlePage.spec.title}">页面标题</h1>
+    </header>
+    <div class="article-body" th:utext="${singlePage.content.content}"></div>
+    <section class="article-comment" th:if="${haloCommentEnabled}">
+      <halo:comment group="content.halo.run" kind="SinglePage" th:attr="name=${singlePage.metadata.name}" colorScheme="light" />
+    </section>
+  </article>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|${category.spec.displayName} - ${site.title}|">分类</title>
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <section class="page-head">
+    <h1 class="page-title" th:text="${category.spec.displayName}">分类名</h1>
+    <p class="page-desc" th:if="${category.spec.description != null and !#strings.isEmpty(category.spec.description)}" th:text="${category.spec.description}">分类描述</p>
+    <p class="page-desc" th:text="${category.postCount} + ' 篇文章'">0 篇文章</p>
+  </section>
+
+  <ul class="post-list" th:if="${not #lists.isEmpty(posts.items)}">
+    <li class="post-card" th:each="post : ${posts.items}">
+      <a th:if="${post.spec.cover != null and !#strings.isEmpty(post.spec.cover)}" th:href="@{${post.status.permalink}}">
+        <img class="post-cover" th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
+      </a>
+      <div class="post-content">
+        <h2 class="post-title">
+          <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">文章标题</a>
+        </h2>
+        <p class="post-excerpt" th:text="${post.status.excerpt}">文章摘要</p>
+        <div class="post-meta">
+          <span class="post-meta-item" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2026-11-06</span>
+          <span class="post-meta-item" th:text="${post.stats?.visit ?: 0} + ' 阅读'">0 阅读</span>
+        </div>
+      </div>
+    </li>
+  </ul>
+
+  <p class="empty-tip" th:if="${#lists.isEmpty(posts.items)}">该分类下暂无文章。</p>
+
+  <nav class="pagination" th:if="${posts.hasPrevious() || posts.hasNext()}">
+    <a class="btn btn-secondary" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">上一页</a>
+    <a class="btn btn-primary" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一页</a>
+  </nav>
+</th:block>
+</body>
+</html>

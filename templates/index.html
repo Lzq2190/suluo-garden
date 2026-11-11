@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = null, content = ~{::content})}">
+<body>
+<th:block th:fragment="content">
+
+  <!-- ===== 首屏：墨夜花田，无论明暗都是这一片朱红 ===== -->
+  <section class="hero" id="hero">
+    <div class="hero-sky" aria-hidden="true">
+      <div class="hero-moon" th:if="${theme.config?.effect?.show_moon != false}"><span></span></div>
+      <svg class="hero-hills" viewBox="0 0 1440 340" preserveAspectRatio="xMidYMax slice">
+        <path class="hill-far" d="M0 176 Q130 118 258 166 T516 154 Q646 106 778 162 T1030 148 Q1164 108 1296 160 T1440 150 L1440 340 L0 340 Z"/>
+        <path class="hill-mid" d="M0 226 Q168 184 332 218 T664 210 Q812 172 962 216 T1288 204 Q1372 194 1440 212 L1440 340 L0 340 Z"/>
+      </svg>
+      <div class="hero-fog"><span></span><span></span><span></span></div>
+      <div class="hero-water"></div>
+    </div>
+
+    <div class="hero-inner">
+      <div class="hero-copy">
+        <p class="hero-eyebrow"><span class="eyebrow-line"></span>姑苏 · 秋杪 · 花事</p>
+        <h1 class="hero-title" th:text="${theme.config?.basic?.hero_title ?: site.title}">一窗烟雨</h1>
+        <p class="hero-subtitle" th:text="${theme.config?.basic?.hero_subtitle ?: site.subtitle}">花开彼岸，雨落江南</p>
+        <p class="hero-note">花叶不相见，各自成一秋。<br>雨从瓦当落下，字从纸上浮起。</p>
+        <a class="hero-scroll" href="#recent">向 下 · 花 径 <span aria-hidden="true"></span></a>
+      </div>
+      <p class="hero-inscription" th:text="${theme.config?.basic?.hero_inscription ?: '花叶不相见，一秋一忘川'}">花叶不相见，一秋一忘川</p>
+    </div>
+
+    <div class="hero-field" id="heroField" th:if="${theme.config?.effect?.show_hills != false}" aria-hidden="true">
+      <svg viewBox="0 0 1440 460" preserveAspectRatio="xMidYMax slice">
+        <g class="field-ground">
+          <path class="ground-line" d="M0 436 Q240 424 480 438 T960 432 T1440 438"/>
+          <g class="grass">
+            <path d="M70 440 Q64 412 58 400 M86 440 Q90 414 98 404 M280 442 Q274 418 268 408 M296 442 Q302 420 310 410 M520 440 Q514 410 508 398 M540 440 Q546 416 554 406 M760 442 Q754 416 748 404 M778 442 Q784 418 792 408 M1010 440 Q1004 412 998 400 M1030 440 Q1036 416 1044 406 M1250 442 Q1244 414 1238 402 M1270 442 Q1276 420 1284 410"/>
+          </g>
+        </g>
+        <!-- 远景：淡、小 -->
+        <use class="plant layer-far" href="#m-plant" x="46" y="176" width="88" height="125" style="--d:-1.1s"/>
+        <use class="plant layer-far" href="#m-plant" x="178" y="198" width="76" height="108" style="--d:-3.4s"/>
+        <use class="plant layer-far" href="#m-plant" x="322" y="170" width="94" height="133" style="--d:-2.2s"/>
+        <use class="plant layer-far" href="#m-plant" x="1046" y="182" width="86" height="122" style="--d:-.7s"/>
+        <use class="plant layer-far" href="#m-plant" x="1206" y="164" width="98" height="139" style="--d:-2.8s"/>
+        <use class="plant layer-far" href="#m-plant" x="1352" y="196" width="78" height="111" style="--d:-1.7s"/>
+        <!-- 中景 -->
+        <use class="plant layer-mid" href="#m-plant" x="408" y="228" width="126" height="179" style="--d:-.4s"/>
+        <use class="plant layer-mid" href="#m-plant" x="568" y="252" width="114" height="162" style="--d:-2.6s"/>
+        <use class="plant layer-mid" href="#m-plant" x="960" y="240" width="130" height="184" style="--d:-1.4s"/>
+        <use class="plant layer-mid" href="#m-plant" x="1110" y="258" width="118" height="167" style="--d:-3.2s"/>
+        <use class="plant layer-mid" href="#m-plant" x="228" y="262" width="112" height="159" style="--d:-2.0s"/>
+        <!-- 近景：大、饱和、出画 -->
+        <use class="plant layer-near" href="#m-plant" x="-24" y="262" width="188" height="266" style="--d:-1.9s"/>
+        <use class="plant layer-near" href="#m-plant" x="148" y="292" width="164" height="232" style="--d:-.9s"/>
+        <use class="plant layer-near" href="#m-plant" x="692" y="250" width="180" height="255" style="--d:-3.7s"/>
+        <use class="plant layer-near" href="#m-plant" x="852" y="286" width="176" height="249" style="--d:-1.5s"/>
+        <use class="plant layer-near" href="#m-plant" x="1300" y="268" width="186" height="264" style="--d:-2.3s"/>
+        <use class="plant layer-near" href="#m-plant" x="612" y="308" width="142" height="201" style="--d:-.2s"/>
+      </svg>
+    </div>
+    <div class="hero-fireflies" id="heroFireflies" aria-hidden="true"></div>
+    <div class="hero-veil" aria-hidden="true"></div>
+  </section>
+
+  <div class="section-head" id="recent">
+    <svg class="section-flower" viewBox="0 0 120 100" aria-hidden="true"><use href="#m-plant" x="0" y="-22" width="120" height="170"/></svg>
+    <h2 class="section-title">近日</h2>
+    <span class="section-rule" aria-hidden="true"></span>
+    <span class="section-count">按年月序</span>
+  </div>
+
+  <ul class="post-list" th:if="${not #lists.isEmpty(posts.items)}">
+    <li class="post-card" th:each="post : ${posts.items}">
+      <span class="post-index" aria-hidden="true"></span>
+      <a class="post-cover-link" th:if="${post.spec.cover != null and !#strings.isEmpty(post.spec.cover)}" th:href="@{${post.status.permalink}}">
+        <img class="post-cover" th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
+      </a>
+      <div class="post-content">
+        <h2 class="post-title">
+          <span class="post-pinned" th:if="${post.spec.pinned}">置顶</span>
+          <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">文章标题</a>
+        </h2>
+        <p class="post-excerpt" th:text="${post.status.excerpt}">文章摘要</p>
+        <div class="post-meta">
+          <span class="post-meta-item" th:text="${#temporals.format(post.spec.publishTime, 'yyyy-MM-dd')}">2026-11-06</span>
+          <a class="post-meta-item" th:if="${not #lists.isEmpty(post.categories)}" th:href="@{${post.categories[0].status.permalink}}" th:text="${post.categories[0].spec.displayName}">分类</a>
+          <span class="post-meta-item" th:text="${post.stats?.visit ?: 0} + ' 阅读'">0 阅读</span>
+        </div>
+      </div>
+      <svg class="post-flower" viewBox="0 0 120 100" aria-hidden="true"><use href="#m-plant" x="0" y="-22" width="120" height="170"/></svg>
+      <span class="post-brush" aria-hidden="true"></span>
+    </li>
+  </ul>
+
+  <p class="empty-tip" th:if="${#lists.isEmpty(posts.items)}">花事未开，待墨再续。</p>
+
+  <nav class="pagination" th:if="${posts.hasPrevious() || posts.hasNext()}">
+    <a class="btn btn-secondary" th:if="${posts.hasPrevious()}" th:href="@{${posts.prevUrl}}">上一页</a>
+    <a class="btn btn-primary" th:if="${posts.hasNext()}" th:href="@{${posts.nextUrl}}">下一页</a>
+  </nav>
+</th:block>
+</body>
+</html>

@@ -1,0 +1,20 @@
+apiVersion: theme.halo.run/v1alpha1
+kind: Theme
+metadata:
+  name: suluo-garden
+spec:
+  displayName: 彼岸花事 · 一窗烟雨
+  author:
+    name: jfsv.cn
+    website: https://www.jfsv.cn
+  description: 取意「苏落江南」影像：飞檐、远山、雨雾、水光，以整片彼岸花田为主视觉。墨夜朱燃的首屏与宣纸朱砂的正文形成对照，花随风摆、花丝明灭、落花成雨。
+  logo: /themes/suluo-garden/assets/images/logo.svg
+  homepage: https://www.jfsv.cn
+  repo: https://github.com/Lzq2190/suluo-garden
+  settingName: "suluo-garden-setting"
+  configMapName: "suluo-garden-configMap"
+  version: 3.0.0
+  requires: ">=2.20.0"
+  license:
+    - name: "MIT"
+      url: "https://opensource.org/licenses/MIT"

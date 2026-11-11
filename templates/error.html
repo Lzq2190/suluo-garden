@@ -1,0 +1,18 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|页面未找到 - ${site.title}|">页面未找到</title>
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <section class="error-page">
+    <p class="error-code">404</p>
+    <h1 class="error-title">烟雨迷途，此处无路</h1>
+    <p class="error-desc">您访问的页面已随流水远去，不妨回到首页重寻。</p>
+    <a class="btn btn-primary" th:href="@{/}">返回首页</a>
+  </section>
+</th:block>
+</body>
+</html>

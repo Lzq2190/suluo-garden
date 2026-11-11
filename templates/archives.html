@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
+<head>
+  <th:block id="page-head">
+    <title th:text="|归档 - ${site.title}|">归档</title>
+  </th:block>
+</head>
+<body>
+<th:block th:fragment="content">
+  <section class="page-head">
+    <h1 class="page-title">归档</h1>
+    <p class="page-desc">流水今日，明月前身</p>
+  </section>
+
+  <div class="archive-year" th:each="archive : ${archives.items}">
+    <h2 class="archive-year-title" th:text="${archive.year}">2026</h2>
+    <div class="archive-month" th:each="month : ${archive.months}">
+      <h3 class="archive-month-title" th:text="${month.month + ' 月'}">11 月</h3>
+      <ul class="archive-list">
+        <li th:each="post : ${month.posts}">
+          <span class="archive-date" th:text="${#temporals.format(post.spec.publishTime, 'MM-dd')}">11-06</span>
+          <a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">文章标题</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+
+  <p class="empty-tip" th:if="${#lists.isEmpty(archives.items)}">暂无归档内容。</p>
+
+  <nav class="pagination" th:if="${archives.hasPrevious() || archives.hasNext()}">
+    <a class="btn btn-secondary" th:if="${archives.hasPrevious()}" th:href="@{${archives.prevUrl}}">上一页</a>
+    <a class="btn btn-primary" th:if="${archives.hasNext()}" th:href="@{${archives.nextUrl}}">下一页</a>
+  </nav>
+</th:block>
+</body>
+</html>
