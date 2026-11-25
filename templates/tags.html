@@ -1,27 +1,14 @@
-<!DOCTYPE html>
-<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(head = ~{::#page-head}, content = ~{::content})}">
-<head>
-  <th:block id="page-head">
-    <title th:text="|标签 - ${site.title}|">标签</title>
-  </th:block>
-</head>
-<body>
-<th:block th:fragment="content">
-  <section class="page-head">
-    <h1 class="page-title">标签</h1>
-    <p class="page-desc">文章标签总览</p>
-  </section>
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(~{::title}, ~{::content})}">
+<head><title th:text="|标签 · ${site.title}|">tags</title></head>
+<body><th:block th:fragment="content">
+<header class="page-heading"><h1 >标签</h1></header>
+<ul class="catalog">
+  <li th:each="item : ${tags}"><a th:href="@{${item.status.permalink}}">
+    <strong th:text="${item.spec.displayName}">名称</strong>
+    <span th:text="|${item.postCount} 篇|">0 篇</span>
 
-  <ul class="term-list">
-    <li class="term-card" th:each="tag : ${tags}">
-      <a th:href="@{${tag.status.permalink}}">
-        <span class="term-name" th:text="${tag.spec.displayName}">标签名</span>
-        <span class="term-count" th:text="${tag.postCount + ' 篇文章'}">0 篇文章</span>
-      </a>
-    </li>
-  </ul>
-
-  <p class="empty-tip" th:if="${#lists.isEmpty(tags)}">暂无标签。</p>
-</th:block>
-</body>
-</html>
+  </a></li>
+</ul>
+<p class="empty" th:if="${#lists.isEmpty(tags)}">暂无标签。</p>
+</th:block></body></html>

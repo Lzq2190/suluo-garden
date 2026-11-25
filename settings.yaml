@@ -16,22 +16,22 @@ spec:
           name: hero_subtitle
           label: 首屏副标题
           value: 花开彼岸，雨落江南
-          help: 展现在大标题下方
+          help: 显示在大标题下方
         - $formkit: text
           name: hero_inscription
-          label: 题跋小字
+          label: 近作题签
           value: 花叶不相见，一秋一忘川
-          help: 首屏题字旁的竖排小字
+          help: 显示在首页近作栏
         - $formkit: text
           name: footer_poetry
           label: 页脚诗句
           value: 彼岸花开，此岸人独立
-          help: 显示在页脚花田上方
+          help: 显示在页脚
         - $formkit: color
           name: accent_color
-          label: 彼岸朱
+          label: 朱砂强调色
           value: "#B3322B"
-          help: 花瓣、印章与强调色；深色模式会自动提亮
+          help: 印章、链接与强调色，夜间配色自动提亮
     - group: bloom
       label: 花事
       formSchema:
@@ -52,7 +52,7 @@ spec:
         - $formkit: number
           name: particle_count
           label: 落花数量
-          value: 72
+          value: 24
           min: 0
           max: 180
           step: 2
@@ -70,29 +70,29 @@ spec:
           label: 首屏画面
           value: landscape
           options:
-            - label: 月下花溪
+            - label: 彩绘标本
               value: landscape
-            - label: 水墨花田
+            - label: 单色标本
               value: ink
-          help: 关闭月轮或远山时使用分层水墨画面，可单独控制园景元素。
+          help: 选择彼岸花图版的着色方式。
         - $formkit: checkbox
           name: show_moon
-          label: 显示月轮
+          label: 显示月牙印记
           value: true
-          help: 首屏右上方的月与光晕
+          help: 图版角落的月牙
         - $formkit: checkbox
           name: show_eaves
-          label: 显示飞檐
+          label: 页眉双线
           value: true
-          help: 导航上方的薄檐剪影
+          help: 使用双线分隔页眉与正文
         - $formkit: checkbox
           name: show_hills
-          label: 显示远山花田
+          label: 显示花谱图版
           value: true
-          help: 首屏与页脚的远山、花田剪影
+          help: 关闭时使用纯文字封面
         - $formkit: checkbox
           name: show_parallax
-          label: 花田随鼠标轻摆
+          label: 图版视差
           value: true
           help: 关闭可减少动画
         - $formkit: checkbox

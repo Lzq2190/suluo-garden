@@ -1,0 +1,24 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org"><body>
+<section th:fragment="entries(posts)">
+  <ol class="entries" th:unless="${#lists.isEmpty(posts.items)}">
+    <li th:each="post : ${posts.items}">
+      <time th:datetime="${post.spec.publishTime}" th:text="${#temporals.format(post.spec.publishTime, 'yyyy.MM.dd')}">2026.11.25</time>
+      <div class="entry-text">
+        <div class="byline"><span th:if="${post.spec.pinned}">置顶</span>
+          <a th:each="cat : ${post.categories}" th:href="@{${cat.status.permalink}}" th:text="${cat.spec.displayName}">随笔</a>
+        </div>
+        <h2><a th:href="@{${post.status.permalink}}" th:text="${post.spec.title}">文章标题</a></h2>
+        <p th:if="${not #strings.isEmpty(post.status.excerpt)}" th:text="${post.status.excerpt}">文章摘要</p>
+      </div>
+      <img class="thumbnail" th:if="${not #strings.isEmpty(post.spec.cover)}" th:src="${post.spec.cover}" alt="" loading="lazy">
+    </li>
+  </ol>
+  <p class="empty" th:if="${#lists.isEmpty(posts.items)}">这里还没有文章。</p>
+  <nav th:replace="~{modules/journal :: pagination(${posts})}"></nav>
+</section>
+<nav class="pagination" aria-label="分页" th:fragment="pagination(result)">
+  <a th:if="${result.hasPrevious()}" th:href="@{${result.prevUrl}}">← 上一页</a>
+  <a th:if="${result.hasNext()}" th:href="@{${result.nextUrl}}">下一页 →</a>
+</nav>
+</body></html>

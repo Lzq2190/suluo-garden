@@ -1,0 +1,10 @@
+<!doctype html>
+<html lang="zh-CN" xmlns:th="https://www.thymeleaf.org"><head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>此页未能打开</title>
+  <link rel="stylesheet" th:href="@{/themes/suluo-garden/assets/css/main.css}">
+</head><body><main class="wrap error">
+  <p class="imprint" th:text="${error.status}">404</p>
+  <h1>此页未能打开</h1>
+  <a class="primary" th:href="@{/}">返回首页 →</a>
+</main></body></html>

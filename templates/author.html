@@ -1,0 +1,7 @@
+<!doctype html>
+<html xmlns:th="https://www.thymeleaf.org" th:replace="~{layout :: html(~{::title}, ~{::content})}">
+<head><title th:text="|${author.spec.displayName} · ${site.title}|">作者文章</title></head>
+<body><th:block th:fragment="content">
+<header class="page-heading"><h1 th:text="${author.spec.displayName}">作者</h1></header>
+<section th:replace="~{modules/journal :: entries(${posts})}"></section>
+</th:block></body></html>
