@@ -2,9 +2,15 @@
 
 > 花开彼岸，雨落江南。花叶不相见，各自成一秋。
 
-[源码仓库](https://github.com/Lzq2190/suluo-garden) · [下载 v3.0.0](https://github.com/Lzq2190/suluo-garden/releases/tag/v3.0.0) · [线上效果](https://www.jfsv.cn/)
+[源码仓库](https://github.com/Lzq2190/suluo-garden) · [下载 3.1.0 安装包](https://github.com/Lzq2190/suluo-garden/raw/refs/heads/main/dist/suluo-garden-3.1.0.zip) · [线上效果](https://www.jfsv.cn/)
 
 一套从「苏落江南」（抖音号 `suluoyingxiang`）影像里提炼画面语言、并以**彼岸花为主视觉**重写的 Halo 2 主题。
+
+## 月下花溪 · 3.1.0
+
+将 `suluo-garden-3.1.0.zip` 上传到 Halo 后台的主题管理页。首屏默认使用本地 WebP 月夜花景，可在「园景 → 首屏画面」切回原版水墨花田。关闭月轮或远山时，首屏按开关组合绘制。文章阅读栏和移动端题字间距也已调整。
+
+## 3.0.0 设计与发布记录
 
 **v3.0.0 是整版重写，不是补丁**：v2 把彼岸花做成"可切换的小粒子 + 页脚三株小花"，视觉上存在感太弱。v3 把花升为整幅首屏母题——墨夜朱燃的花田、月轮、远山、水光，配合宣纸朱砂的正文；花本身由 SVG 精确画出反卷花瓣、放射花丝与花茎，会随风摆、会呼吸、会落成雨。
 

@@ -4,10 +4,10 @@
 <th:block th:fragment="content">
 
   <!-- ===== 首屏：墨夜花田，无论明暗都是这一片朱红 ===== -->
-  <section class="hero" id="hero">
+  <section class="hero" id="hero" th:classappend="${theme.config?.effect?.hero_style != 'ink' and theme.config?.effect?.show_hills != false and theme.config?.effect?.show_moon != false} ? 'hero-landscape'">
     <div class="hero-sky" aria-hidden="true">
       <div class="hero-moon" th:if="${theme.config?.effect?.show_moon != false}"><span></span></div>
-      <svg class="hero-hills" viewBox="0 0 1440 340" preserveAspectRatio="xMidYMax slice">
+      <svg th:if="${theme.config?.effect?.show_hills != false}" class="hero-hills" viewBox="0 0 1440 340" preserveAspectRatio="xMidYMax slice">
         <path class="hill-far" d="M0 176 Q130 118 258 166 T516 154 Q646 106 778 162 T1030 148 Q1164 108 1296 160 T1440 150 L1440 340 L0 340 Z"/>
         <path class="hill-mid" d="M0 226 Q168 184 332 218 T664 210 Q812 172 962 216 T1288 204 Q1372 194 1440 212 L1440 340 L0 340 Z"/>
       </svg>
@@ -21,7 +21,7 @@
         <h1 class="hero-title" th:text="${theme.config?.basic?.hero_title ?: site.title}">一窗烟雨</h1>
         <p class="hero-subtitle" th:text="${theme.config?.basic?.hero_subtitle ?: site.subtitle}">花开彼岸，雨落江南</p>
         <p class="hero-note">花叶不相见，各自成一秋。<br>雨从瓦当落下，字从纸上浮起。</p>
-        <a class="hero-scroll" href="#recent">向 下 · 花 径 <span aria-hidden="true"></span></a>
+        <a class="hero-scroll" href="#recent">阅读近作 <span aria-hidden="true"></span></a>
       </div>
       <p class="hero-inscription" th:text="${theme.config?.basic?.hero_inscription ?: '花叶不相见，一秋一忘川'}">花叶不相见，一秋一忘川</p>
     </div>
@@ -62,14 +62,13 @@
 
   <div class="section-head" id="recent">
     <svg class="section-flower" viewBox="0 0 120 100" aria-hidden="true"><use href="#m-plant" x="0" y="-22" width="120" height="170"/></svg>
-    <h2 class="section-title">近日</h2>
+    <h2 class="section-title">近日随笔</h2>
     <span class="section-rule" aria-hidden="true"></span>
     <span class="section-count">按年月序</span>
   </div>
 
   <ul class="post-list" th:if="${not #lists.isEmpty(posts.items)}">
     <li class="post-card" th:each="post : ${posts.items}">
-      <span class="post-index" aria-hidden="true"></span>
       <a class="post-cover-link" th:if="${post.spec.cover != null and !#strings.isEmpty(post.spec.cover)}" th:href="@{${post.status.permalink}}">
         <img class="post-cover" th:src="${post.spec.cover}" th:alt="${post.spec.title}" loading="lazy" />
       </a>

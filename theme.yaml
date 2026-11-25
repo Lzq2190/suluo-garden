@@ -13,7 +13,7 @@ spec:
   repo: https://github.com/Lzq2190/suluo-garden
   settingName: "suluo-garden-setting"
   configMapName: "suluo-garden-configMap"
-  version: 3.0.0
+  version: 3.1.0
   requires: ">=2.20.0"
   license:
     - name: "MIT"

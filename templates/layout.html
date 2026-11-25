@@ -152,7 +152,7 @@
   <!-- 点击朱晕 -->
   <div class="ripple-layer" id="rippleLayer" aria-hidden="true"></div>
 
-  <script>
+  <script th:inline="javascript">
     (function () {
       var root = document.documentElement;
       var reduced = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;

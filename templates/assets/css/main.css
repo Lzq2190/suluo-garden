@@ -14,7 +14,7 @@
   --card-soft:  #EFE9DC;
   --ink-1:      #1B2421;   /* 浓墨 · 标题 */
   --ink-2:      #414C46;   /* 中墨 · 正文 */
-  --ink-3:      #7A857C;   /* 淡墨 · 辅助 */
+  --ink-3:      #626F65;   /* 淡墨 · 辅助 */
   --ink-4:      #DACFC0;   /* 极淡 · 边线 */
   --line:       #DCD4C3;
   --line-soft:  #E8E1D3;
@@ -190,9 +190,7 @@ html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
   position: relative;
   width: 100vw;
   margin-left: calc(50% - 50vw);
-  min-height: 720px;
-  height: 88vh;
-  max-height: 940px;
+  min-height: clamp(430px, 58vh, 640px);
   overflow: hidden;
   isolation: isolate;
   color: #F1EADB;
@@ -262,13 +260,13 @@ html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
   pointer-events: none;
 }
 .hero-inner a { pointer-events: auto; }
-.hero-copy { padding-top: clamp(104px, 15vh, 172px); max-width: 620px; }
+.hero-copy { padding: clamp(56px, 8vh, 100px) 0; max-width: 660px; min-width: 0; overflow-wrap: anywhere; }
 .hero-eyebrow { display: flex; align-items: center; gap: 12px; margin: 0 0 26px; font-size: 13px; letter-spacing: .42em; color: rgba(226, 214, 192, .68); }
 .eyebrow-line { display: inline-block; width: 42px; height: 1px; background: linear-gradient(90deg, var(--petal), transparent); }
 .hero-title {
   margin: 0; font-family: var(--font-serif); font-weight: 700;
-  font-size: clamp(58px, 8.2vw, 108px); line-height: 1.18; letter-spacing: .16em;
-  color: #F5EEDF; text-shadow: 0 6px 40px rgba(232, 75, 61, .24), 0 2px 8px rgba(0, 0, 0, .35);
+  font-size: clamp(56px, 6.4vw, 94px); line-height: 1.18; letter-spacing: .16em;
+  color: #F5EEDF; text-shadow: 0 2px 18px rgba(0, 0, 0, .28);
   animation: heroRise .9s cubic-bezier(.2,.7,.3,1) both;
 }
 .hero-subtitle {
@@ -282,7 +280,7 @@ html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
   animation: heroRise .9s .24s cubic-bezier(.2,.7,.3,1) both;
 }
 .hero-scroll {
-  display: inline-flex; align-items: center; gap: 14px; margin-top: 54px;
+  display: inline-flex; align-items: center; gap: 14px; margin-top: 28px;
   font-size: 12.5px; letter-spacing: .34em; color: rgba(226, 214, 192, .72);
   animation: heroRise .9s .36s cubic-bezier(.2,.7,.3,1) both;
 }
@@ -328,7 +326,7 @@ html[data-theme="dark"] .theme-toggle .icon-sun { display: block; }
    ------------------------------------------------------------ */
 .sky-weather { position: fixed; inset: 0; z-index: 40; overflow: hidden; pointer-events: none; opacity: .42; }
 /* 首页有花田作主景，粒子全开；文章与内页以读字为先，压到四成 */
-body:has(.hero) .sky-weather { opacity: 1; }
+body:has(.hero) .sky-weather { opacity: .58; }
 .petal-fall {
   position: absolute; top: -10vh; width: var(--sz, 15px); height: calc(var(--sz, 15px) * 1.55);
   background: linear-gradient(148deg, #F4775B 0%, var(--petal) 52%, #7C1F1B 100%);
@@ -393,14 +391,13 @@ body:has(.hero) .sky-weather { opacity: 1; }
 .section-rule { flex: 1 1 auto; height: 1px; background: linear-gradient(90deg, var(--line), transparent); }
 .section-count { font-size: 13px; letter-spacing: .16em; color: var(--ink-3); white-space: nowrap; }
 
-.post-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; counter-reset: post; }
+.post-list { list-style: none; margin: 0; padding: 0; display: grid; gap: 22px; }
 .post-card {
   position: relative; display: flex; align-items: stretch; gap: 26px;
   padding: 30px 34px; overflow: hidden;
   background: var(--card); border: 1px solid var(--line-soft); border-radius: 3px;
   box-shadow: var(--shadow-1);
   transition: transform .35s cubic-bezier(.2,.7,.3,1), box-shadow .35s ease, border-color .35s ease;
-  counter-increment: post;
 }
 .post-card::before {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
@@ -409,11 +406,6 @@ body:has(.hero) .sky-weather { opacity: 1; }
 }
 .post-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-2); border-color: color-mix(in srgb, var(--petal) 32%, var(--line)); }
 .post-card:hover::before { opacity: 1; }
-.post-index {
-  position: absolute; right: 26px; top: 16px; font-family: var(--font-serif);
-  font-size: 13px; letter-spacing: .1em; color: var(--ink-4);
-}
-.post-index::before { content: counter(post, decimal-leading-zero); }
 .post-cover-link { flex: 0 0 208px; align-self: stretch; overflow: hidden; border-radius: 2px; }
 .post-cover { display: block; width: 100%; height: 100%; min-height: 150px; object-fit: cover; transition: transform .6s ease; }
 .post-card:hover .post-cover { transform: scale(1.06); }
@@ -607,11 +599,56 @@ a.post-meta-item:hover { color: var(--petal); }
 .reveal { opacity: 0; transform: translateY(22px); }
 .reveal.revealed { opacity: 1; transform: none; transition: opacity .7s ease, transform .7s cubic-bezier(.2,.7,.3,1); }
 
+/* 月夜实景由同一花田图层承载，沿用主题的视差和减少动态效果设置。 */
+.hero-landscape .hero-field {
+  inset: -6px -12px;
+  height: auto;
+  background: linear-gradient(90deg, rgba(8, 18, 23, .42), transparent 68%),
+              url("../images/moon-garden.webp") 65% center / cover no-repeat;
+}
+.hero-landscape .hero-field svg { visibility: hidden; }
+.hero-landscape .hero-veil {
+  height: 2px;
+  background: linear-gradient(90deg, var(--petal-deep), var(--filament) 64%, transparent);
+}
+.hero-landscape .hero-inscription {
+  margin-top: 72px;
+  color: #f6eedc;
+  text-shadow: 0 1px 6px #0a151a;
+}
+.hero-scroll {
+  border: 1px solid rgba(244, 230, 201, .45);
+  padding: 8px 16px;
+  color: #f6eedc;
+  background: rgba(8, 18, 23, .35);
+}
+.hero-scroll:hover { background: rgba(8, 18, 23, .72); }
+.hero-scroll span { height: 20px; }
+:focus-visible { outline: 2px solid var(--petal); outline-offset: 3px; }
+.hero :focus-visible { outline-color: var(--moon); }
+
+#recent { scroll-margin-top: 24px; margin-top: clamp(36px, 5vw, 66px); }
+.post-content { align-self: center; }
+.post-excerpt { color: var(--ink-2); }
+.post-meta { font-family: system-ui, sans-serif; font-size: 12px; }
+.post-title, .article-title { overflow-wrap: anywhere; }
+.article { max-width: 760px; }
+.article-body { line-height: 1.95; }
+.article-body blockquote { color: var(--ink-2); }
+
+@media (max-width: 768px) {
+  .hero-landscape .hero-field {
+    background-position: center, 80% center;
+    background-image: linear-gradient(90deg, rgba(8, 18, 23, .76), rgba(8, 18, 23, .16)),
+                      url("../images/moon-garden.webp");
+  }
+  .post-content { align-self: stretch; }
+}
 /* ------------------------------------------------------------
    11. 响应式
    ------------------------------------------------------------ */
 @media (max-width: 980px) {
-  .hero { min-height: 660px; height: 80vh; }
+
   .hero-inscription { display: none; }
   .hero-copy { max-width: 100%; }
   .post-cover-link { flex-basis: 160px; }
@@ -623,8 +660,8 @@ a.post-meta-item:hover { color: var(--petal); }
   .nav-menu { order: 3; width: 100%; margin: 0; justify-content: flex-start; flex-wrap: wrap; gap: 0 4px; }
   .nav-link { padding: 8px 9px; font-size: 14px; }
   .nav-tools { margin-left: auto; }
-  .hero { min-height: 620px; height: 78vh; }
-  .hero-copy { padding-top: 92px; }
+  .hero { min-height: 440px; }
+  .hero-copy { padding: 64px 0 62px; }
   .hero-title { font-size: clamp(46px, 12vw, 72px); letter-spacing: .1em; }
   .hero-subtitle { letter-spacing: .18em; }
   .hero-field { height: 56%; }
@@ -654,7 +691,7 @@ a.post-meta-item:hover { color: var(--petal); }
 }
 
 @media (prefers-reduced-motion: reduce) {
-  *, *::before, *::after { animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
+  *, *::before, *::after { animation-delay: 0s !important; animation-duration: .01ms !important; animation-iteration-count: 1 !important; scroll-behavior: auto !important; }
   .sky-weather, .hero-fireflies { display: none; }
   .reveal { opacity: 1; transform: none; }
 }

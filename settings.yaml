@@ -65,6 +65,16 @@ spec:
     - group: effect
       label: 园景
       formSchema:
+        - $formkit: select
+          name: hero_style
+          label: 首屏画面
+          value: landscape
+          options:
+            - label: 月下花溪
+              value: landscape
+            - label: 水墨花田
+              value: ink
+          help: 关闭月轮或远山时使用分层水墨画面，可单独控制园景元素。
         - $formkit: checkbox
           name: show_moon
           label: 显示月轮
